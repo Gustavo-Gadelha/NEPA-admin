@@ -6,8 +6,16 @@ from app.models import Admin
 
 def register_commands(app):
     @app.cli.command("create-admin")
-    @click.option("--email", prompt=True, help="Admin email")
-    @click.option("--nome", prompt=True, help="Admin name")
+    @click.option(
+        "--nome",
+        prompt=True,
+        help="Admin name",
+    )
+    @click.option(
+        "--email",
+        prompt=True,
+        help="Admin email",
+    )
     @click.option(
         "--password",
         prompt=True,
@@ -19,7 +27,7 @@ def register_commands(app):
         "--role",
         default="admin",
         show_default=True,
-        help="User role / permission",
+        help="User permission",
     )
     def create_admin(email, nome, password, role):
         existing = Admin.query.filter_by(email=email).first()
