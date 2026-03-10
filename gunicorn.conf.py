@@ -2,7 +2,7 @@
 
 wsgi_app = "wsgi:app"
 
-bind = "127.0.0.1:8181"
+bind = "127.0.0.1:8070"
 backlog = 2048
 
 workers = 1
