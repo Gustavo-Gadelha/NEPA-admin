@@ -1,4 +1,7 @@
+from dotenv import load_dotenv
 from flask import Flask, render_template
+
+load_dotenv()
 
 
 def create_app():
@@ -9,12 +12,11 @@ def create_app():
     def not_found(error):
         return render_template("404.html"), 404
 
-    from app.extensions import admin, csrf, db, login_manager, ph
+    from app.extensions import admin, db, login_manager, ph
     from app.views import SecureAdminIndexView
 
     db.init_app(app)
     ph.init_app(app)
-    csrf.init_app(app)
     login_manager.init_app(app)
 
     admin.init_app(app, index_view=SecureAdminIndexView())

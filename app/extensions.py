@@ -2,12 +2,10 @@ from flask_admin import Admin
 from flask_argon2 import Argon2
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import CSRFProtect
 
 db = SQLAlchemy()
 admin = Admin()
 ph = Argon2()
-csrf = CSRFProtect()
 login_manager = LoginManager()
 login_manager.login_view = "auth.login"
 
