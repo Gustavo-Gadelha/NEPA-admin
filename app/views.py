@@ -44,7 +44,7 @@ class SecureModelView(ModelView):
     form_base_class = SecureForm
 
     def is_accessible(self):
-        return current_user.is_authenticated and current_user.permissao == "admin"
+        return current_user.is_authenticated and current_user.permissao.lower() == "admin"
 
     def inaccessible_callback(self, name, **kwargs):
         return redirect(url_for("admin.login_view", next=request.url))
@@ -93,6 +93,14 @@ class ProfessorAdmin(SecureModelView):
 
 
 class ProjetoAdmin(SecureModelView):
+    column_labels = {
+        "Linhadepesquisa": "Linha de Pesquisa",
+        "Palavraschave": "Palavras Chave",
+        "Objetivogeral": "Objetivo Geral",
+        "Objetivoespecifico": "Objetivo Especifico",
+        "Cronogramadeatividade": "Cronograma de Atividade",
+    }
+
     column_list = (
         "id",
         "titulo",
@@ -125,13 +133,27 @@ class AlunoProjetoAdmin(SecureModelView):
 
 
 class EditalAdmin(SecureModelView):
+    # TODO: Implementar salvamento de arquivo para permitir criação
+    can_create = False
+
+    column_labels = {
+        "Arquivo Pdf": "Caminho do arquivo",
+    }
+
     column_list = (
         "id",
         "nome",
         "slug",
         "admin",
+        "arquivo_pdf",
         "data_criacao",
     )
 
     column_filters = ("data_criacao",)
     column_searchable_list = ("nome", "slug")
+
+    form_excluded_columns = ("slug",)
+
+    def on_model_change(self, form, model, is_created):
+        if not model.slug:
+            model.generate_slug()
