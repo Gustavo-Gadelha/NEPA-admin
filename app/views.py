@@ -1,16 +1,43 @@
 from flask import redirect, request, url_for
-from flask_admin import AdminIndexView
+from flask_admin import AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import SecureForm
-from flask_login import current_user
+from flask_login import current_user, login_user, logout_user
+
+from app.extensions import ph
+from app.forms import LoginForm
 
 
 class SecureAdminIndexView(AdminIndexView):
-    def is_accessible(self):
-        return current_user.is_authenticated and current_user.permissao == "admin"
+    @expose("/")
+    def index(self):
+        if not current_user.is_authenticated:
+            return redirect(url_for(".login_view"))
+        return super().index()
 
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for("auth.login"))
+    @expose("/login/", methods=("GET", "POST"))
+    def login_view(self):
+        if current_user.is_authenticated:
+            return redirect(url_for(".index"))
+
+        form = LoginForm(request.form)
+        if form.validate_on_submit():
+            login_user(form.user)
+
+            if "next" in request.args:
+                next_url = request.args.get("next")
+                if next_url:
+                    return redirect(next_url)
+
+            return redirect(url_for(".index"))
+
+        self._template_args["form"] = form
+        return super().index()
+
+    @expose("/logout/")
+    def logout_view(self):
+        logout_user()
+        return redirect(url_for(".index"))
 
 
 class SecureModelView(ModelView):
@@ -20,11 +47,9 @@ class SecureModelView(ModelView):
         return current_user.is_authenticated and current_user.permissao == "admin"
 
     def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for("auth.login", next=request.url))
+        return redirect(url_for("admin.login_view", next=request.url))
 
     def on_model_change(self, form, model, is_created):
-        from app.extensions import ph
-
         if hasattr(model, "password") and form.password.data:
             model.password = ph.generate_password_hash(form.password.data)
 
@@ -41,10 +66,9 @@ class AlunoAdmin(SecureModelView):
         "permissao",
     )
 
-    column_exclude_list = ("password",)
-
-    column_searchable_list = ("nome", "matricula", "email")
     column_filters = ("curso", "permissao", "data_ingresso")
+    column_searchable_list = ("nome", "matricula", "email")
+    column_exclude_list = ("password",)
 
     form_excluded_columns = ("projetos",)
 
@@ -61,10 +85,9 @@ class ProfessorAdmin(SecureModelView):
         "permissao",
     )
 
-    column_exclude_list = ("password",)
-
-    column_filters = ("curso", "aprovado")
+    column_filters = ("curso", "permissao", "aprovado")
     column_searchable_list = ("nome", "matricula", "email")
+    column_exclude_list = ("password",)
 
     form_excluded_columns = ("projetos_propostos",)
 
@@ -82,14 +105,8 @@ class ProjetoAdmin(SecureModelView):
         "data_criacao",
     )
 
-    column_filters = (
-        "curso",
-        "situacao",
-        "aprovado",
-        "data_criacao",
-    )
-
-    column_searchable_list = ("titulo", "linhaDePesquisa")
+    column_filters = ("curso", "situacao", "aprovado", "data_criacao")
+    column_searchable_list = ("titulo", "id")
 
     form_excluded_columns = ("alunos_cadastrados",)
 
@@ -104,11 +121,7 @@ class AlunoProjetoAdmin(SecureModelView):
     )
 
     column_filters = ("aprovado", "reprovado")
-
-    column_searchable_list = (
-        "aluno.nome",
-        "projeto.titulo",
-    )
+    column_searchable_list = ("aluno.nome", "aluno.email", "projeto.titulo", "projeto.id")
 
 
 class EditalAdmin(SecureModelView):
@@ -120,6 +133,5 @@ class EditalAdmin(SecureModelView):
         "data_criacao",
     )
 
-    column_searchable_list = ("nome", "slug")
-
     column_filters = ("data_criacao",)
+    column_searchable_list = ("nome", "slug")

@@ -1,0 +1,53 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+{{ super() }}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          {% if current_user.is_authenticated %}
+
+          <h1 class="mb-3">Admin Dashboard</h1>
+          <p class="lead text-muted">Painel administrativo do sistema.</p>
+
+          <p>
+            Utilize o menu superior para gerenciar usuários, permissões
+            e recursos da aplicação.
+          </p>
+
+          {% else %}
+
+          <h3 class="mb-4 text-center">Login do Administrador</h3>
+
+          <form method="POST" action="">
+            {{ form.hidden_tag() if form.hidden_tag }}
+
+            {% for f in form if f.type != 'CSRFTokenField' %}
+            <div class="form-group">
+
+              <label class="font-weight-bold">{{ f.label.text }}</label>
+              {{ f(class="form-control") }}
+
+              {% if f.errors %}
+              <div class="text-danger mt-1 small">
+                {% for e in f.errors %}
+                <div>{{ e }}</div>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+            </div>
+            {% endfor %}
+
+            <button class="btn btn-primary btn-block mt-3" type="submit">Entrar</button>
+          </form>
+
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
