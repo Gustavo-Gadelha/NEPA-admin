@@ -6,30 +6,11 @@ from app.models import Admin
 
 def register_commands(app):
     @app.cli.command("create-admin")
-    @click.option(
-        "--nome",
-        prompt=True,
-        help="Admin name",
-    )
-    @click.option(
-        "--email",
-        prompt=True,
-        help="Admin email",
-    )
-    @click.option(
-        "--password",
-        prompt=True,
-        hide_input=True,
-        confirmation_prompt=True,
-        help="Admin password",
-    )
-    @click.option(
-        "--role",
-        default="admin",
-        show_default=True,
-        help="User permission",
-    )
-    def create_admin(email, nome, password, role):
+    @click.option("--name", prompt=True, help="Admin name")
+    @click.option("--email", prompt=True, help="Admin email")
+    @click.option("--password", prompt=True, hide_input=True, confirmation_prompt=True, help="Admin password")
+    @click.option("--role", default="admin", show_default=True, help="User permission")
+    def create_admin(email, name, password, role):
         existing = Admin.query.filter_by(email=email).first()
 
         if existing:
@@ -37,7 +18,7 @@ def register_commands(app):
             return
 
         admin = Admin(
-            nome=nome,
+            nome=name,
             email=email,
             password=ph.generate_password_hash(password),
             permissao=role,
@@ -46,4 +27,4 @@ def register_commands(app):
         db.session.add(admin)
         db.session.commit()
 
-        click.echo("Admin created successfully.")
+        click.echo(f"Admin {email} created successfully.")

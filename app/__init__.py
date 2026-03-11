@@ -12,10 +12,10 @@ def create_app():
     from app.views import SecureAdminIndexView
 
     db.init_app(app)
-    babel.init_app(app)
-    admin.init_app(app, index_view=SecureAdminIndexView())
     ph.init_app(app)
     login_manager.init_app(app)
+    babel.init_app(app)
+    admin.init_app(app, index_view=SecureAdminIndexView())
 
     from app.models import Admin, Aluno, AlunoProjeto, Edital, Professor, Projeto
     from app.views import AlunoAdmin, AlunoProjetoAdmin, EditalAdmin, ProfessorAdmin, ProjetoAdmin
