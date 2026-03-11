@@ -20,7 +20,7 @@ class Aluno(db.Model):
     projetos = db.relationship("AlunoProjeto", back_populates="aluno")
 
     def __repr__(self):
-        return f"<Aluno {self.id}>"
+        return f"<Aluno {self.email}>"
 
 
 class Professor(db.Model):
@@ -36,7 +36,7 @@ class Professor(db.Model):
     projetos_propostos = db.relationship("Projeto", back_populates="professor")
 
     def __repr__(self):
-        return f"<Professor {self.id}>"
+        return f"<Professor {self.email}>"
 
 
 class Projeto(db.Model):
