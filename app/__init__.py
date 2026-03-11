@@ -8,10 +8,11 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object("app.config")
 
-    from app.extensions import admin, db, login_manager, ph
+    from app.extensions import admin, babel, db, login_manager, ph
     from app.views import SecureAdminIndexView
 
     db.init_app(app)
+    babel.init_app(app)
     admin.init_app(app, index_view=SecureAdminIndexView())
     ph.init_app(app)
     login_manager.init_app(app)
