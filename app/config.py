@@ -13,3 +13,8 @@ SQLALCHEMY_ECHO = False
 
 BABEL_DEFAULT_LOCALE = "pt_BR"
 BABEL_DEFAULT_TIMEZONE = "America/Fortaleza"
+
+# TODO: Change this to True as soon as https is implemented
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
