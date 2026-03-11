@@ -93,8 +93,6 @@ class ProfessorAdmin(SecureModelView):
 
 
 class ProjetoAdmin(SecureModelView):
-    name = "Inscrições"
-
     column_labels = {
         "linhaDePesquisa": "Linha de Pesquisa",
         "palavrasChave": "Palavras Chave",
