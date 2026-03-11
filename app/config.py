@@ -8,7 +8,9 @@ ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 ADMIN_ROLE = os.getenv("ADMIN_ROLE")
 
-DEBUG = os.getenv("DEBUG")
+DEBUG = os.getenv("DEBUG", False)
+TESTING = os.getenv("TESTING", False)
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
 SQLALCHEMY_ECHO = False

@@ -61,6 +61,9 @@ def create_app():
     register_error_handlers(app)
 
     with app.app_context():
+        if app.config["TESTING"]:
+            db.create_all()
+
         _load_admin()
 
     return app
