@@ -19,6 +19,9 @@ class Aluno(db.Model):
     permissao = db.Column(db.String(50), nullable=False, default="aluno")
     projetos = db.relationship("AlunoProjeto", back_populates="aluno")
 
+    def __repr__(self):
+        return f"<Aluno {self.id}>"
+
 
 class Professor(db.Model):
     id = db.Column(db.VARCHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -31,6 +34,9 @@ class Professor(db.Model):
     aprovado = db.Column(db.Boolean, nullable=False, default=False)
     permissao = db.Column(db.String(50), nullable=False, default="professor")
     projetos_propostos = db.relationship("Projeto", back_populates="professor")
+
+    def __repr__(self):
+        return f"<Professor {self.id}>"
 
 
 class Projeto(db.Model):
@@ -65,6 +71,9 @@ class Projeto(db.Model):
             self.data_criacao = datetime.utcnow()
         self.data_limite_edicao = self.data_criacao + timedelta(days=dias_para_edicao)
 
+    def __repr__(self):
+        return f"<Projeto {self.id}>"
+
 
 class AlunoProjeto(db.Model):
     id = db.Column(db.VARCHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -83,6 +92,9 @@ class AlunoProjeto(db.Model):
         self.aprovado = False
         self.reprovado = True
 
+    def __repr__(self):
+        return f"<AlunoProjeto {self.id}>"
+
 
 class Admin(db.Model, UserMixin):
     id = db.Column(db.VARCHAR(36), primary_key=True, default=lambda: str(uuid.uuid4()))
@@ -94,6 +106,9 @@ class Admin(db.Model, UserMixin):
 
     def get_id(self):
         return self.id
+
+    def __repr__(self):
+        return f"<Admin {self.email}>"
 
 
 class Edital(db.Model):
@@ -117,3 +132,6 @@ class Edital(db.Model):
             counter += 1
 
         self.slug = unique_slug
+
+    def __repr__(self):
+        return f"<Edital {self.id}>"
