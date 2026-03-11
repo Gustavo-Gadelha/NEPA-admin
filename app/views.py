@@ -93,12 +93,14 @@ class ProfessorAdmin(SecureModelView):
 
 
 class ProjetoAdmin(SecureModelView):
+    name = "Inscrições"
+
     column_labels = {
-        "Linhadepesquisa": "Linha de Pesquisa",
-        "Palavraschave": "Palavras Chave",
-        "Objetivogeral": "Objetivo Geral",
-        "Objetivoespecifico": "Objetivo Especifico",
-        "Cronogramadeatividade": "Cronograma de Atividade",
+        "linhaDePesquisa": "Linha de Pesquisa",
+        "palavrasChave": "Palavras Chave",
+        "objetivoGeral": "Objetivo Geral",
+        "objetivoEspecifico": "Objetivo Especifico",
+        "cronogramaDeAtividade": "Cronograma de Atividade",
     }
 
     column_list = (
