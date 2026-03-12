@@ -3,6 +3,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
+APPLICATION_ROOT = os.getenv("APPLICATION_ROOT", "/")
+
 ADMIN_NAME = os.getenv("ADMIN_NAME")
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
