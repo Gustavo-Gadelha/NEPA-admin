@@ -1,5 +1,3 @@
-import email
-
 from dotenv import load_dotenv
 from flask import Flask
 
@@ -23,7 +21,7 @@ def _load_admin():
         admin = Admin(nome=name_, email=email_, password=password_, permissao=role_)
         db.session.add(admin)
         db.session.commit()
-        current_app.logger.info(f"Admin {email} created successfully.")
+        current_app.logger.info(f"Admin {email_} created successfully.")
 
 
 def create_app():
